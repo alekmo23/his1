@@ -137,3 +137,121 @@ button[onclick="showInstructions()"] {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* Дополнения для мобильной адаптации */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+        padding: 0 50px;
+    }
+
+    .draggable-item {
+        padding: 15px;
+        font-size: 16px;
+        margin: 8px 0;
+    }
+
+    button {
+        padding: 12px 20px;
+        font-size: 16px;
+        min-width: auto;
+        width: 100%;
+        margin: 8px 0;
+    }
+
+    .period-filter {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    select {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .question-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #questionTitle {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .instructions {
+        padding: 15px;
+        margin: 10px 0;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .draggable-item {
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    header h1 {
+        font-size: 1.3rem;
+        padding: 0 40px;
+    }
+
+    .back-btn {
+        font-size: 0.9rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #answerInfo {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button[onclick="showInstructions()"] {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+
+/* Оптимизация для сенсорных экранов */
+@media (hover: none) and (pointer: coarse) {
+    .draggable-item {
+        touch-action: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .draggable-item:active {
+        transform: scale(1.02);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    button {
+        min-height: 48px;
+    }
+}
+
+/* Улучшение читаемости на маленьких экранах */
+@media (max-width: 360px) {
+    .draggable-item {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    #questionTitle {
+        font-size: 1rem;
+    }
+}
+
+/* Адаптация анимаций для мобильных устройств */
+@media (prefers-reduced-motion: reduce) {
+    .highlight {
+        animation: none;
+    }
+}

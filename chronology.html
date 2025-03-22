@@ -2,56 +2,124 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Хронология ЕГЭ История</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Общие стили */
         .period-filter {
-            margin: 20px 0;
+            margin: 15px 0;
             padding: 10px;
             background: #f0f0f0;
-            border-radius: 5px;
+            border-radius: 8px;
         }
+        
         .task-counter {
             font-weight: bold;
             color: #2c3e50;
+            font-size: 14px;
         }
+
         .draggable-list {
             min-height: 200px;
             border: 2px dashed #ccc;
-            padding: 15px;
+            padding: 10px;
             margin: 15px 0;
+            border-radius: 8px;
         }
+
         .draggable-item {
             background: #fff;
-            padding: 10px;
-            margin: 5px 0;
-            cursor: move;
+            padding: 15px;
+            margin: 8px 0;
+            cursor: pointer;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            transition: all 0.3s;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s;
+            touch-action: none;
         }
-        #result {
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 4px;
+
+        button {
+            font-size: 16px;
+            padding: 12px 20px;
+            margin: 8px 5px;
+            min-width: 120px;
         }
-        .dragging {
-            opacity: 0.5;
-            transform: scale(1.02);
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .draggable-item {
+                padding: 12px;
+                font-size: 15px;
+                margin: 6px 0;
+            }
+
+            .period-filter {
+                padding: 8px;
+                margin: 10px 0;
+            }
+
+            select {
+                font-size: 15px;
+                padding: 8px;
+                width: 100%;
+            }
+
+            .question-header {
+                flex-direction: column;
+            }
+
+            .question-header div {
+                margin-top: 10px;
+            }
+
+            button {
+                width: 100%;
+                margin: 5px 0;
+                padding: 12px;
+            }
+
+            #questionTitle {
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .instructions {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .start-btn {
+                width: 100%;
+                margin-top: 10px;
+            }
         }
-        .training-interface {
-            display: none;
-        }
-        .instructions {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            max-width: 500px;
-            margin: 20px auto;
+
+        @media (max-width: 480px) {
+            .draggable-item {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 22px;
+                padding: 0 40px;
+            }
+
+            .back-btn {
+                font-size: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
         }
     </style>
 </head>
+<!-- Остальная часть HTML без изменений из предыдущего рабочего варианта -->
 <body>
     <header>
         <h1>Тренировка хронологии</h1>
