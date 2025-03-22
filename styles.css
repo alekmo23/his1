@@ -1,58 +1,39 @@
-/* styles.css */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
+    line-height: 1.6;
+    background: #f8f9fa;
+    color: #212529;
 }
 
 header {
-    background-color: #2c3e50;
+    background: #2c3e50;
     color: white;
     padding: 1rem;
     text-align: center;
     position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 2rem;
-}
-
-.topic-card {
-    background: white;
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin: 1rem 0;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-}
-
-.topic-card:hover {
-    transform: translateY(-3px);
-}
-
-.draggable-item {
-    background: white;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: move;
+    padding: 20px;
 }
 
 button {
-    background-color: #3498db;
+    background: #3498db;
     color: white;
     border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 5px;
-    margin-top: 1rem;
+    padding: 12px 20px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: all 0.2s;
+    margin: 5px;
 }
 
 button:hover {
-    background-color: #2980b9;
+    background: #2980b9;
+    transform: translateY(-1px);
 }
 
 .back-btn {
@@ -60,198 +41,44 @@ button:hover {
     text-decoration: none;
     position: absolute;
     left: 1rem;
-    top: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
-<!-- Добавить в раздел <style> -->
+
 .instructions {
     background: #e3f2fd;
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1rem 0;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
     border-left: 4px solid #2196F3;
 }
 
-.how-to-use {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-    padding: 1rem;
-    background: #fff;
-    border-radius: 8px;
+#result {
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 6px;
 }
 
-.how-to-use div {
-    flex: 1;
-    text-align: center;
-    padding: 1rem;
+#answerInfo {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 10px;
 }
 
-.how-to-use img {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 0.5rem;
-}
-
-.highlight {
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-/* Инструкция первого запуска */
-.instructions {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    max-width: 500px;
-    margin: 20px auto;
-    animation: fadeIn 0.5s;
-}
-
-.start-btn {
-    background: #3498db;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: transform 0.2s;
-}
-
-/* Кнопка помощи */
-button[onclick="showInstructions()"] {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    padding: 0;
-    margin-left: 10px;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-/* Дополнения для мобильной адаптации */
-@media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
-
-    header h1 {
-        font-size: 1.5rem;
-        padding: 0 50px;
-    }
-
-    .draggable-item {
-        padding: 15px;
-        font-size: 16px;
-        margin: 8px 0;
-    }
-
-    button {
-        padding: 12px 20px;
-        font-size: 16px;
-        min-width: auto;
-        width: 100%;
-        margin: 8px 0;
-    }
-
-    .period-filter {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    select {
-        font-size: 16px;
-        padding: 10px;
-    }
-
-    .question-header {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    #questionTitle {
-        font-size: 1.1rem;
-        text-align: center;
-    }
-
-    .instructions {
-        padding: 15px;
-        margin: 10px 0;
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .draggable-item {
-        padding: 12px;
-        font-size: 15px;
-    }
-
+@media (max-width: 576px) {
     header h1 {
         font-size: 1.3rem;
         padding: 0 40px;
     }
 
-    .back-btn {
-        font-size: 0.9rem;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    #answerInfo {
+    .draggable-item {
         font-size: 14px;
         padding: 10px;
-    }
-
-    button[onclick="showInstructions()"] {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-    }
-}
-
-/* Оптимизация для сенсорных экранов */
-@media (hover: none) and (pointer: coarse) {
-    .draggable-item {
-        touch-action: none;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-
-    .draggable-item:active {
-        transform: scale(1.02);
-        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     }
 
     button {
-        min-height: 48px;
-    }
-}
-
-/* Улучшение читаемости на маленьких экранах */
-@media (max-width: 360px) {
-    .draggable-item {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    #questionTitle {
-        font-size: 1rem;
-    }
-}
-
-/* Адаптация анимаций для мобильных устройств */
-@media (prefers-reduced-motion: reduce) {
-    .highlight {
-        animation: none;
+        width: 100%;
+        margin: 5px 0;
     }
 }

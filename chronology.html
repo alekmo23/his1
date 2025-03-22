@@ -6,45 +6,38 @@
     <title>Хронология ЕГЭ История</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Общие стили */
+        /* Основные стили */
         .period-filter {
             margin: 15px 0;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 8px;
-        }
-        
-        .task-counter {
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 14px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .draggable-list {
             min-height: 200px;
-            border: 2px dashed #ccc;
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 8px;
+            border: 2px dashed #ced4da;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background: #fff;
         }
 
         .draggable-item {
-            background: #fff;
-            padding: 15px;
+            padding: 12px;
             margin: 8px 0;
-            cursor: pointer;
-            border: 1px solid #ddd;
+            background: #fff;
+            border: 1px solid #dee2e6;
             border-radius: 8px;
-            font-size: 16px;
+            cursor: move;
             transition: all 0.2s;
-            touch-action: none;
         }
 
-        button {
-            font-size: 16px;
-            padding: 12px 20px;
-            margin: 8px 5px;
-            min-width: 120px;
+        #checkButton[disabled] {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: #6c757d;
         }
 
         /* Мобильная адаптация */
@@ -54,72 +47,17 @@
             }
 
             .draggable-item {
-                padding: 12px;
                 font-size: 15px;
-                margin: 6px 0;
-            }
-
-            .period-filter {
-                padding: 8px;
-                margin: 10px 0;
-            }
-
-            select {
-                font-size: 15px;
-                padding: 8px;
-                width: 100%;
-            }
-
-            .question-header {
-                flex-direction: column;
-            }
-
-            .question-header div {
-                margin-top: 10px;
-            }
-
-            button {
-                width: 100%;
-                margin: 5px 0;
-                padding: 12px;
-            }
-
-            #questionTitle {
-                font-size: 18px;
-                text-align: center;
-            }
-
-            .instructions {
-                margin: 10px;
-                padding: 15px;
-            }
-
-            .start-btn {
-                width: 100%;
-                margin-top: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .draggable-item {
-                font-size: 14px;
                 padding: 10px;
             }
 
-            header h1 {
-                font-size: 22px;
-                padding: 0 40px;
-            }
-
-            .back-btn {
-                font-size: 14px;
-                top: 50%;
-                transform: translateY(-50%);
+            button {
+                font-size: 15px;
+                padding: 10px 15px;
             }
         }
     </style>
 </head>
-<!-- Остальная часть HTML без изменений из предыдущего рабочего варианта -->
 <body>
     <header>
         <h1>Тренировка хронологии</h1>
@@ -142,16 +80,16 @@
 
         <div class="task" id="sequenceTask">
             <div class="instructions" id="firstVisitInstructions" style="display: none;">
-                <h3>🎯 Краткая инструкция:</h3>
+                <h3>🎯 Как работать с тренажёром:</h3>
                 <ol>
-                    <li>Выберите период в фильтре</li>
-                    <li>Перетаскивайте события</li>
-                    <li>Нажмите "Проверить"</li>
+                    <li>Выберите исторический период</li>
+                    <li>Перетаскивайте события в правильном порядке</li>
+                    <li>Нажмите "Проверить" для проверки</li>
                 </ol>
                 <button onclick="startTraining()" class="start-btn">Начать тренировку →</button>
             </div>
 
-            <div class="training-interface">
+            <div class="training-interface" style="display: none;">
                 <div class="question-header">
                     <h3 id="questionTitle"></h3>
                     <div>
@@ -161,18 +99,19 @@
                 </div>
                 
                 <div class="draggable-list"></div>
-                <button onclick="checkOrder()">Проверить</button>
-                <div id="result"></div>
-                <div id="answerInfo"></div>
+                <div class="controls">
+                    <button onclick="checkOrder()" id="checkButton" disabled>Проверить</button>
+                    <div id="result"></div>
+                    <div id="answerInfo"></div>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        let currentQuestion;
-        let firstLoad = true;
-        const questions = [
-		{
+        let currentQuestion = null;
+        let isTrainingStarted = false;
+        const questions = [{
                 period: "ancient",
                 events: [
                     {id: 1, text: "Призвание варягов", year: 862},
@@ -898,15 +837,16 @@
     ],
     description: "Внешняя политика СССР"
 }
-        ];
-        // Инициализация при загрузке
+];
+
+        // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             init();
             document.getElementById('periodSelect').addEventListener('change', updateQuestions);
         });
+
         function init() {
-            const visited = localStorage.getItem('visited');
-            if(!visited) {
+            if(!localStorage.getItem('visited')) {
                 document.getElementById('firstVisitInstructions').style.display = 'block';
                 localStorage.setItem('visited', 'true');
             } else {
@@ -915,12 +855,64 @@
         }
 
         function startTraining() {
+            isTrainingStarted = true;
             document.getElementById('firstVisitInstructions').style.display = 'none';
             document.querySelector('.training-interface').style.display = 'block';
+            document.getElementById('checkButton').disabled = false;
             newQuestion();
+        }
+
+        function newQuestion() {
+            const period = document.getElementById('periodSelect').value;
+            const filtered = period === 'all' ? questions : questions.filter(q => q.period === period);
+            
+            currentQuestion = filtered[Math.floor(Math.random() * filtered.length)];
+            document.getElementById('questionTitle').textContent = currentQuestion.description;
+            
+            const list = document.querySelector('.draggable-list');
+            list.innerHTML = '';
+            
+            currentQuestion.events.sort(() => Math.random() - 0.5).forEach(event => {
+                const item = document.createElement('div');
+                item.className = 'draggable-item';
+                item.draggable = true;
+                item.textContent = event.text;
+                item.dataset.id = event.id;
+                list.appendChild(item);
+            });
+
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('answerInfo').innerHTML = '';
             initDragAndDrop();
         }
 
+        function checkOrder() {
+            if (!isTrainingStarted || !currentQuestion) {
+                alert("Сначала начните тренировку!");
+                return;
+            }
+
+            const items = document.querySelectorAll('.draggable-item');
+            const userOrder = Array.from(items).map(item => parseInt(item.dataset.id));
+            const correctOrder = currentQuestion.events.map(e => e.id);
+
+            const result = document.getElementById('result');
+            const answerInfo = document.getElementById('answerInfo');
+            
+            result.innerHTML = JSON.stringify(userOrder) === JSON.stringify(correctOrder) 
+                ? "✅ Верно! Молодец!" 
+                : "❌ Попробуйте еще раз. Правильный порядок:";
+            
+            result.style.color = JSON.stringify(userOrder) === JSON.stringify(correctOrder) 
+                ? '#2ecc71' 
+                : '#e74c3c';
+
+            answerInfo.innerHTML = JSON.stringify(userOrder) !== JSON.stringify(correctOrder) 
+                ? `<strong>Правильный ответ:</strong><br>${currentQuestion.events.sort((a,b) => a.id - b.id).map(e => `${e.text} (${e.year})`).join('<br>')}` 
+                : '';
+        }
+
+        // Drag and Drop логика
         function initDragAndDrop() {
             const items = document.querySelectorAll('.draggable-item');
             items.forEach(item => {
@@ -928,12 +920,12 @@
                 item.addEventListener('dragend', handleDragEnd);
             });
 
-            const list = document.querySelector('.draggable-list');
-            list.addEventListener('dragover', handleDragOver);
+            document.querySelector('.draggable-list').addEventListener('dragover', handleDragOver);
         }
 
         function handleDragStart(e) {
             e.target.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', e.target.dataset.id);
         }
 
         function handleDragEnd(e) {
@@ -945,94 +937,34 @@
             const afterElement = getDragAfterElement(e.clientY);
             const draggable = document.querySelector('.dragging');
             const list = document.querySelector('.draggable-list');
-            
-            if(!draggable || !list) return;
 
-            if(afterElement == null) {
-                list.appendChild(draggable);
-            } else {
-                list.insertBefore(draggable, afterElement);
+            if (draggable && list) {
+                if (afterElement == null) {
+                    list.appendChild(draggable);
+                } else {
+                    list.insertBefore(draggable, afterElement);
+                }
             }
         }
 
         function getDragAfterElement(y) {
             const draggableElements = [...document.querySelectorAll('.draggable-item:not(.dragging)')];
-            
             return draggableElements.reduce((closest, child) => {
                 const box = child.getBoundingClientRect();
                 const offset = y - box.top - box.height / 2;
-                return (offset < 0 && offset > closest.offset) ? 
-                    { offset: offset, element: child } : closest;
+                return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
             }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function showInstructions() {
+            alert("Перетаскивайте события в правильной последовательности!\nИспользуйте фильтр для выбора периода.");
         }
 
         function updateQuestions() {
             const period = document.getElementById('periodSelect').value;
-            const count = period === 'all' 
-                ? questions.length 
-                : questions.filter(q => q.period === period).length;
-            
+            const count = period === 'all' ? questions.length : questions.filter(q => q.period === period).length;
             document.getElementById('counter').textContent = `Доступно заданий: ${count}`;
             newQuestion();
-        }
-
-        function newQuestion() {
-            const period = document.getElementById('periodSelect').value;
-            const filtered = period === 'all' 
-                ? questions 
-                : questions.filter(q => q.period === period);
-
-            if(filtered.length === 0) {
-                document.getElementById('questionTitle').textContent = "Вопросы не найдены";
-                return;
-            }
-
-            currentQuestion = filtered[Math.floor(Math.random() * filtered.length)];
-            document.getElementById('questionTitle').textContent = currentQuestion.description;
-            
-            const list = document.querySelector('.draggable-list');
-            list.innerHTML = '';
-            
-            currentQuestion.events
-                .sort(() => Math.random() - 0.5)
-                .forEach(event => {
-                    const item = document.createElement('div');
-                    item.className = 'draggable-item';
-                    item.draggable = true;
-                    item.textContent = event.text;
-                    item.dataset.id = event.id;
-                    list.appendChild(item);
-                });
-
-            initDragAndDrop();
-        }
-
-        function checkOrder() {
-            const items = document.querySelectorAll('.draggable-item');
-            const correctOrder = currentQuestion.events.map(e => e.id);
-            const userOrder = Array.from(items).map(item => parseInt(item.dataset.id));
-            
-            const result = document.getElementById('result');
-            const answerInfo = document.getElementById('answerInfo');
-            
-            answerInfo.innerHTML = `<strong>Правильный ответ:</strong><br>${
-                currentQuestion.events
-                    .sort((a,b) => a.id - b.id)
-                    .map(e => `${e.text} (${e.year})`)
-                    .join('<br>')
-            }`;
-
-            if(JSON.stringify(userOrder) === JSON.stringify(correctOrder)) {
-                result.innerHTML = "✅ Верно! Молодец!";
-                result.style.color = '#2ecc71';
-            } else {
-                result.innerHTML = "❌ Попробуйте еще раз. Правильный порядок:";
-                result.style.color = '#e74c3c';
-            }
-        }
-
-        function showInstructions() {
-            alert("Просто перетаскивайте события в правильном порядке!\nФильтр периодов - вверху слева.");
         }
     </script>
 </body>
