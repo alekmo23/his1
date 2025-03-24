@@ -25,15 +25,16 @@
         }
 
         .draggable-item {
-            padding: 12px;
-            margin: 8px 0;
-            background: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            cursor: move;
-            transition: all 0.2s;
-        }
-
+        padding: 12px;
+        margin: 8px 0;
+        background: #fff;
+        border: 2px solid #dee2e6; /* Увеличили толщину границы */
+        border-radius: 8px;
+        cursor: move;
+        transition: all 0.2s;
+        user-select: none; /* Запрет выделения текста */
+    }
+	   
         #checkButton[disabled] {
             opacity: 0.7;
             cursor: not-allowed;
@@ -41,14 +42,15 @@
         }
 
         /* Мобильная адаптация */
-        @media (max-width: 768px) {
+       
+	    @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
 
             .draggable-item {
                 font-size: 15px;
-                padding: 10px;
+                padding: 12px;
             }
 
             button {
